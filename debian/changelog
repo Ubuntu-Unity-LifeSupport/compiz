@@ -1,3 +1,11 @@
+compiz (1:0.9.14.2+25.10.20250930-0ubuntu3+unity1) resolute; urgency=medium
+
+  * src/session.cpp: leave with _exit() on the session manager's die
+    request, so exit handlers do not run under the GDBus worker thread;
+    fixes a crash at logout and restart.
+
+ -- Ubuntu Unity Life Support <mihail.rozshko@gmail.com>  Thu, 24 Sep 2026 05:07:48 +0000
+
 compiz (1:0.9.14.2+25.10.20250930-0ubuntu3) resolute; urgency=medium
 
   * Drop build dependency on libxorg-gtest-dev, uninstallable.
