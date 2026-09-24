@@ -6832,8 +6832,17 @@ CompWindow::setWindowFrameExtents (const CompWindowExtents *b,
 
 	if (!priv->alreadyDecorated)
 	{
-	    /* Make sure we don't move the window outside the workarea */
-	    CompRect const& workarea = screen->getWorkareaForOutput (outputDevice ());
+	    /* Make sure we don't move the window outside the workarea. That is
+	     * the workarea of the current viewport: compare a window on another
+	     * viewport with the same area on its own one, or every compiz
+	     * restart takes the frame's height off the windows below the
+	     * current viewport, until they end up on it. */
+	    CompRect workarea = screen->getWorkareaForOutput (outputDevice ());
+	    const CompPoint &wvp = defaultViewport ();
+	    const CompPoint &svp = screen->vp ();
+
+	    workarea.setPos (CompPoint (workarea.x () + (wvp.x () - svp.x ()) * screen->width (),
+					workarea.y () + (wvp.y () - svp.y ()) * screen->height ()));
 	    CompPoint boffset((b->left + b->right) - (priv->border.left + priv->border.right),
 			      (b->top + b->bottom) - (priv->border.top + priv->border.bottom));
 
