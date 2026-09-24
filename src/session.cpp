@@ -225,7 +225,12 @@ dieCallback (SmcConn   connection,
     screen->sessionEvent (CompSession::EventDie, noOptions ());
 
     CompSession::close ();
-    exit (0);
+
+    /* Leave without running exit handlers: other threads are still alive -
+     * GDBus's worker in particular may be writing to the bus - and tearing
+     * down shared state under them can crash compiz at logout.
+     * The session is over; there is nothing left to clean up. */
+    _exit (0);
 }
 
 static void
